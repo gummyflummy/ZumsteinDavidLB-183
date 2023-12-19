@@ -16,69 +16,37 @@ Die Handlungsziele sehen wie folgt aus:
 
 ## _Handlungsziel 1_
 
-Im Ersten Handlungsziel haben wir die Infrastruktur eingerichtet und eine unsichere Beispielsapp heruntergeladen. Anschliessend haben wir im Plenum die App gestartet und den Aufbau einbisschen angeschaut. Als Anschluss haben wir über ein paar wichtigen Grundbegriffen recherchiert, wie Zum Beispiel ```integrität```, ```Vertraulichkeit``` und ```Verfügbarkeit```. Wir haben Situationen erhalten und mussten schätzen wie sehr die Begriffe auf das Szenario zutreffen.
+### Artefakt
+Als Artefakt habe ich eine Tabelle der OWASP Top 10 2021 erstellt. Wir haben die Webseite im Unterricht angeschaut.
 
-Beim Auftrag ```LA_183_10_Business_Logic```, haben wir die REST-Endpoints zum Bearbeiten und löschen angeschaut. Es ist aufgefallen, dass wenn man die ID des News Eintrags kannte, dieser bearbeitet oder gelöscht werden kann. Der Benutzer wurde im Backend nicht geprüft. Als Reaktion darauf hatten wir die Aufgabe das Programm zu verändern, damit normale Benutzer nur noch ihre eigenen News bearbeiten und löschen konnten.
+| Sicherheitsrisiko                          | Tests                                              | Gegenmaßnahmen                                                         | Auswirkungen                                                                        |
+| ------------------------------------------ | -------------------------------------------------- | ---------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
+| Broken Access Control                      | Authentifizierungsprüfungen, Zugriffskontrollen    | Verbesserte Zugriffskontrollen, Session-Verwaltung, Least-Privilege    | Unberechtigter Datenzugriff, Datenmanipulation, Identity Theft                      |
+| Cryptographic Failures                     | Kryptographische Audits, Verschlüsselungsprüfungen | Implementierung aktueller Verschlüsselungsstandards, Schlüsselrotation | Offenlegung sensibler Daten, Systemkompromittierung, Brute-Force                    |
+| Injection                                  | Penetrationstests, Code-Analyse                    | Eingabevalidierung, Prepared Statements, Parameterized Queries         | Datenverlust, Systemkompromittierung, SQL Injection                                 |
+| Insecure Design                            | Risikoanalyse, Sicherheitsdesignprüfungen          | Threat Modeling, Sichere Designmuster, Input Validierung               | Designfehler, Schwierigkeiten bei der Fehlerbehebung, Broken Authentication         |
+| Security Misconfiguration                  | Sicherheitskonfigurationsprüfungen                 | Automatisierte Konfigurationsprüfungen, Regelkonformität               | Sicherheitslücken, Unberechtigter Datenzugriff, Exposed Sensitive Data              |
+| Vulnerable and Outdated Components         | Schwachstellenanalysen, Versionskontrolle          | Aktualisierung von Komponenten, Verwendung vertrauenswürdiger Quellen  | Bekannte Exploits, Anfälligkeit für Angriffe, Zero-Day Vulnerabilities              |
+| Identification and Authentication Failures | Identitätsprüfungen, Authentifizierungstests       | Multifaktor-Authentifizierung, Sichere Authentifizierungsmethoden      | Identitätsdiebstahl, Zugriff durch nicht autorisierte Benutzer, Credential Stuffing |
+| Software and Data Integrity Failures       | Integritätsprüfungen, Softwareupdatesprüfungen     | Verifizierung von Softwareupdates, Sichere CI/CD-Pipelines             | Kompromittierung von Datenintegrität, Schadsoftwareausführung, Tampered Software    |
+| Security Logging and Monitoring Failures   | Überwachungstests, Logging-Analysen                | Implementierung von Logging, Überwachung kritischer Aktivitäten        | Unbemerkte Angriffe, Verzögerung der Reaktion auf Vorfälle, Evasion Techniques      |
+| Server Side Request Forgery (SSRF)         | Tests für serverseitige Anfragen, Validierungen    | Inputvalidierung, Abschirmung von sensiblen Ressourcen                 | Umleitung von Anfragen, Ausnutzung von Serverressourcen, Information Disclosure     |
 
-Artefakt:
-Folgende Änderungen wurden im Code gemacht:
+Quelle: [https://owasp.org/Top10/](https://owasp.org/Top10/)
 
-```csharp
-//In NewsController.cs
-public class NewsController : ControllerBase
+### Wie wurde das Handlungsziel erreicht?
 
-//mehr Code...
+Das Ziel, aktuelle Bedrohungen zu erkennen und zu erläutern sowie Informationen zu Erkennung und Gegenmaßnahmen zu beschaffen, wurde durch die Zusammenstellung und Strukturierung der OWASP Top 10 2021 erreicht. Die Bereitstellung von Tests, Gegenmaßnahmen und potenziellen Auswirkungen bietet einen Überblick über die wichtigsten aktuellen Sicherheitsrisiken.
 
-[HttpPatch("{id}")]
-[ProducesResponseType(200)]
-/////////////////////////////
-[ProducesResponseType(403)]
-////////////////////////////
-hinzugefüt
-[ProducesResponseType(404)]
+### Erklärung des Artefakts
 
-public ActionResult Update(int id, NewsWriteDto request)
-{
-  return NotFound(string.Format("News {0} not found", id));
-}
-///////////////////////////////////////////////////////////////////////////
-if (!_userService.IsAdmin() && _userService.GetUserId() != news.AuthorId)
-{
-  return Forbid();
-}
-////////////////////////////////////////////////////////////////////////////
-hinzugefügt
+Das Artefakt ist eine von mir serstellte Tabelle, die auf der offiziellen OWASP-Website basiert und die OWASP Top 10 für das Jahr 2021 präsentiert. Die OWASP Top 10 ist eine Rangliste der zehn häufigsten Sicherheitsrisiken im Bereich der Webanwendungen. Die Tabelle listet jedes Sicherheitsrisiko auf, beschreibt mögliche Tests zur Erkennung, Gegenmaßnahmen zur Minimierung des Risikos und potenzielle Auswirkungen, wenn das Risiko ausgenutzt wird.
 
-//noch mehr code...
+Die Sicherheitsrisiken in der Tabelle reichen von "Broken Access Control" bis "Server Side Request Forgery (SSRF)". Für jedes Risiko werden Tests vorgeschlagen, um die Schwachstellen zu erkennen. Gegenmaßnahmen, wie verbesserte Zugriffskontrollen, Kryptographie-Audits oder sichere Authentifizierungsmethoden, werden empfohlen, um diese Risiken zu mindern. Die Auswirkungen reichen von unberechtigtem Datenzugriff über Identitätsdiebstahl bis hin zu Serverressourcenausnutzung.
 
-[HttpDelete("{id}")]
-[ProducesResponseType(200)]
-/////////////////////////////
-[ProducesResponseType(403)] 
-/////////////////////////////
-hinzugefügt
-[ProducesResponseType(404)]
+### Kritische Beurteilung der Umsetzung des Artefakts
 
-public ActionResult Delete(int id)
-{
-  return NotFound(string.Format("News {0} not found", id));
-}
-
-///////////////////////////////////////////////////////////////////////////
-if (!_userService.IsAdmin() && _userService.GetUserId() != news.AuthorId)
-{
-  return Forbid();
-}
-///////////////////////////////////////////////////////////////////////////
-hinzugefügt
-
-```
-
-Vor Änderung: (Screenshot zeigen): 
-User konnte mit Adminrechte einen 'AdminNews' erstellen (und kann diese immer noch bearbeiten.)
-jetzt kommt der Error 401 --> Screenshot zeigen vom Error und versuchen des erstellen des newbeitrags als 'admin'. 
-
-
+Ich denke, dass die Umsetzung des Artefakts gut gelungen ist. Die OWASP Top 10 ist eine sehr bekannte und anerkannte Liste von Sicherheitsrisiken, die regelmäßig aktualisiert wird. Die Liste ist sehr umfangreich und bietet einen guten Überblick über die wichtigsten Sicherheitsrisiken. Die Tabelle ist übersichtlich und strukturiert und bietet einen schnellen Überblick über die wichtigsten Informationen zu jedem Sicherheitsrisiko.
 ## **_Handlungsziel 2_**
 
 Aufträge bearbeitet: 
