@@ -14,7 +14,7 @@ Die Handlungsziele sehen wie folgt aus:
 | 4             | Sicherheitsrelevante Aspekte bei Entwurf, Implementierung und Inbetriebnahme berücksichtigen.                                                                                            |
 | 5             | Informationen für Auditing und Logging generieren. Auswertungen und Alarme definieren und implementieren.                                                                                |
 
-## _Handlungsziel 1_
+## **_Handlungsziel 1_**
 
 ### Artefakt
 Als Artefakt habe ich eine Tabelle der top 3 Bedrohungen erstellt. 
@@ -38,79 +38,84 @@ Ich habe das Handlungsziel mit meiner Tabelle erreicht, da es darlegt, dass ich 
 
 Mein Artefakt ist eine Tabelle der Top 3 aktuellen Bedrohungen. Es wird jeweils kurz die Bedrohung beschrieben und dann anschliessend welche Auswirkungen so eine Bedrohung hat. Es werden auch Gegenmassnahmen erläutert um die Bedrohungen zu verhindern. Die Daten habe ich von einer Webseite, die wir in der Schule angeschaut haben, namens owasp. Sie zeigt die Statistiken der Top 10 Bedrohungen vom Jahr 2021. Ich habe die top 3 in meiner Tabelle eingebaut.
 
-### Kritische Beurteilung der Umsetzung des Artefakts
-Mein Artefakt sieht strukturiert und einfach zu lesen aus. Jedoch ist sie einbisschen kurz. Ich hätte anstatt die Top 3 Bedrohungen einfach alle Bedrohungen auflisten können. Wenn man die knappheit auslässt, finde ich, das Artefakt ist gut gelungen. Die Daten der owasp Webseite sind vertraulich.
+### Beurteilung des Artefakts
+Mein Artefakt ist strukturiert und einfach zu lesen. Jedoch kann sie für einige kurz vorkommen. Ich hätte anstatt die Top 3 Bedrohungen einfach alle Bedrohungen auflisten können. Ich persönlich preferiere aber lieber eine kurze und knappe Tabelle, da für mich die Top 3 ausreichen. Für mich ist das Artefakt gut gelungen. Die Daten der owasp Webseite sind vertraulich.
+
 ## **_Handlungsziel 2_**
 
-Aufträge bearbeitet: 
-SQL_INjection
-XSS
-Unsaubere API
-Review 
-Pentests
+### Artefakt
 
-code sql injection:
+Mein Artefakt ist die Code Veränderung im Auftrag LA_183_05_SQLInjection.
+
+Vor der Veränderung:
 ```csharp
-public ActionResult<User> Login(LoginDto request)
-{
-    if (request == null || request.Username.IsNullOrEmpty() || request.Password.IsNullOrEmpty())
-    {
-        return BadRequest();
-    }
-    string username = request.Username;
-    string passwordHash = MD5Helper.ComputeMD5Hash(request.Password);
+[HttpPost]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        public ActionResult<User> Login(LoginDto request)
+        {
+            if (request == null || request.Username.IsNullOrEmpty() || request.Password.IsNullOrEmpty())
+            {
+                return BadRequest();
+            }
 
-    User? user = _context.Users
-        .Where(u => u.Username == username)
-        .Where(u => u.Password == passwordHash)
-        .FirstOrDefault();
+            string sql = string.Format("SELECT * FROM Users WHERE username = '{0}' AND password = '{1}'",
+                request.Username,
+                MD5Helper.ComputeMD5Hash(request.Password));
 
-    if (user == null)
-    {
-        return Unauthorized("login failed");
-    }
-
-    return Ok(CreateToken(user));
-}
-```
-broken access controll:
-
-```csharp
-private string CreateToken(User user)
-{
-    string issuer = _configuration.GetSection("Jwt:Issuer").Value!;
-    string audience = _configuration.GetSection("Jwt:Audience").Value!;
-
-    List<Claim> claims = new List<Claim> {
-            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-            new Claim(JwtRegisteredClaimNames.NameId, user.Id.ToString()),
-            new Claim(JwtRegisteredClaimNames.UniqueName, user.Username),
-            new Claim(ClaimTypes.Role,  (user.IsAdmin ? "admin" : "user"))
-    };
-
-    string base64Key = _configuration.GetSection("Jwt:Key").Value!;
-    SymmetricSecurityKey securityKey = new SymmetricSecurityKey(Convert.FromBase64String(base64Key));
-
-    SigningCredentials credentials = new SigningCredentials(
-            securityKey,
-            SecurityAlgorithms.HmacSha512Signature);
-
-    JwtSecurityToken token = new JwtSecurityToken(
-        issuer: issuer,
-        audience: audience,
-        claims: claims,
-        notBefore: DateTime.Now,
-        expires: DateTime.Now.AddDays(1),
-        signingCredentials: credentials
-     );
-
-    return new JwtSecurityTokenHandler().WriteToken(token);
-}
+            User? user= _context.Users.FromSqlRaw(sql).FirstOrDefault();
+            if (user == null)
+            {
+                return Unauthorized("login failed");
+            }
+            return Ok(user);
+        }
 ```
 
-unsaubere API:
+nach der Veränderung:
+```csharp
+[HttpPost]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(401)]
+        public ActionResult<User> Login(LoginDto request)
+        {
+            if (request == null || request.Username.IsNullOrEmpty() || request.Password.IsNullOrEmpty())
+            {
+                return BadRequest();
+            }
 
-Hier mussten wir die Website an sich ändern. 
+            string username = request.Username;
+            string passwordHash = MD5Helper.ComputeMD5Hash(request.Password);
+
+            User? user = _context.Users
+                .Where(u => u.Username == username)
+                .Where(u => u.Password == passwordHash)
+                .FirstOrDefault();
+
+
+            if (user == null)
+            {
+                return Unauthorized("login failed");
+            }
+            return Ok(user);
+        }
+```
+
+
+### Wie wurde das Handlungsziel erreicht?
+
+Ich habe das Handlungsziel erreicht indem ich mit der Veränderung des Codes eine bestehende Sicherheitslücke in einem Code behoben habe. Dies weist nach, dass ich eine Sicherheitslücke und ihre Ursache in einer Applikation erkennen konnte und anschliessend eine Gegenmassnahme vorgeschlagen und umgesetzt habe.
+
+### Erklärung des Artefakts
+
+Mein Artefakt zeigt Zwei Versionen eines Codes. In der ersten besteht die Gefahr von injections wie einer SQL injection. In der zweiten ist diese Gefahr behoben da die Eingaben des Benutzers nichtmehr direkt in die SQL-Abfrage eingefügt werden sondern als seperate Variable verwendet werden. Als Beispiel hätte man in der ersten Version als Passwort `--` schreiben können um sich als jeder belieber Benutzer einloggen zu können, selbst als Administrator.
+
+
+### Kritische Beurteilung des Artefakts
+
+Das Artefakt ist mir gut gelungen, wir hatten es 1 zu 1 so im Unterricht angeschaut, weswegen es keine grosse Herausforderung dargestellt hat. Das Artefakt ist ein gutes Beispiel für einen unsicheren und sicheren code, wobei man sagen muss, man kann einen Code so gut wie immer noch sicherer gestalten.
 
 ## **_Handlungsziel 3_**
 
