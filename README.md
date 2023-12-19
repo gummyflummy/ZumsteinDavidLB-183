@@ -22,8 +22,8 @@ Als Artefakt habe ich eine Tabelle der top 3 Bedrohungen erstellt.
 | Sicherheitsrisiko                          | Beschreibung                                              | Gegenmaßnahmen                                                         | Auswirkungen                                                                        |
 | ------------------------------------------ | -------------------------------------------------- | ---------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
 | Broken Access Control                      | Benutzer können ausserhalb ihrer zugewiesenen Berechtigungen handeln.   |Session-Verwaltung,  Verbesserte Zugriffskontrollen   | Unberechtigter Datenzugriff und Manipulation                |
-| Cryptographic Failures                     | Kryptographische Audits, Verschlüsselungsprüfungen | Implementierung aktueller Verschlüsselungsstandards, Schlüsselrotation | Offenlegung sensibler Daten, Systemkompromittierung, Brute-Force                    |
-| Injection                                  | Penetrationstests, Code-Analyse                    | Eingabevalidierung, Prepared Statements, Parameterized Queries         | Datenverlust, Systemkompromittierung, SQL Injection                                 |
+| Cryptographic Failures                     | Sicherheitsmaßnahmen, um Daten zu schützen, funktionieren nicht richtig | die neusten Verschlüsselungsstandards benutzen, sensitive Informationen nicht unnötig speichern | Sensible Daten werden geklaut.                    |
+| Injection                                  | unerlaubte Einschleusung von Daten oder Befehlen in einer Anwendung.                   | positive server-side input validation, sichere API nutzen, Eingabevalidierung         | unerlaubte Code ausführung                                |
 
 
 
