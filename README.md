@@ -19,7 +19,7 @@ Die Handlungsziele sehen wie folgt aus:
 ### Artefakt
 Als Artefakt habe ich eine Tabelle der top 3 Bedrohungen erstellt. 
 
-| Sicherheitsrisiko                          | Beschreibung                                              | Gegenmaßnahmen                                                         | Auswirkungen                                                                        |
+| Sicherheitsrisiko                          | Beschreibung                                              | Gegenmassnahmen                                                         | Auswirkungen                                                                        |
 | ------------------------------------------ | -------------------------------------------------- | ---------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
 | Broken Access Control                      | Benutzer können ausserhalb ihrer zugewiesenen Berechtigungen handeln.   |Session-Verwaltung,  Verbesserte Zugriffskontrollen   | Unberechtigter Datenzugriff und Manipulation                |
 | Cryptographic Failures                     | Sicherheitsmaßnahmen, um Daten zu schützen, funktionieren nicht richtig | die neusten Verschlüsselungsstandards benutzen, sensitive Informationen nicht unnötig speichern | Sensible Daten werden geklaut.                    |
@@ -30,19 +30,16 @@ Als Artefakt habe ich eine Tabelle der top 3 Bedrohungen erstellt.
 
 Quelle: [https://owasp.org/Top10/](https://owasp.org/Top10/)
 
-### Wie wurde das Handlungsziel erreicht?
+### wie habe ich das Handlungsziel erreicht?
 
-Das Ziel, aktuelle Bedrohungen zu erkennen und zu erläutern sowie Informationen zu Erkennung und Gegenmaßnahmen zu beschaffen, wurde durch die Zusammenstellung und Strukturierung der OWASP Top 10 2021 erreicht. Die Bereitstellung von Tests, Gegenmaßnahmen und potenziellen Auswirkungen bietet einen Überblick über die wichtigsten aktuellen Sicherheitsrisiken.
+Ich habe das Handlungsziel mit meiner Tabelle erreicht, da es darlegt, dass ich aktuelle Bedrohungen erkennen und erläutern kann. Ich habe jeweils ein Problem beschrieben und dann anschliessend die Auswirkungen und Gegenmassnahmen erläutert.
 
 ### Erklärung des Artefakts
 
-Das Artefakt ist eine von mir serstellte Tabelle, die auf der offiziellen OWASP-Website basiert und die OWASP Top 10 für das Jahr 2021 präsentiert. Die OWASP Top 10 ist eine Rangliste der zehn häufigsten Sicherheitsrisiken im Bereich der Webanwendungen. Die Tabelle listet jedes Sicherheitsrisiko auf, beschreibt mögliche Tests zur Erkennung, Gegenmaßnahmen zur Minimierung des Risikos und potenzielle Auswirkungen, wenn das Risiko ausgenutzt wird.
-
-Die Sicherheitsrisiken in der Tabelle reichen von "Broken Access Control" bis "Server Side Request Forgery (SSRF)". Für jedes Risiko werden Tests vorgeschlagen, um die Schwachstellen zu erkennen. Gegenmaßnahmen, wie verbesserte Zugriffskontrollen, Kryptographie-Audits oder sichere Authentifizierungsmethoden, werden empfohlen, um diese Risiken zu mindern. Die Auswirkungen reichen von unberechtigtem Datenzugriff über Identitätsdiebstahl bis hin zu Serverressourcenausnutzung.
+Mein Artefakt ist eine Tabelle der Top 3 aktuellen Bedrohungen. Es wird jeweils kurz die Bedrohung beschrieben und dann anschliessend welche Auswirkungen so eine Bedrohung hat. Es werden auch Gegenmassnahmen erläutert um die Bedrohungen zu verhindern. Die Daten habe ich von einer Webseite, die wir in der Schule angeschaut haben, namens owasp. Sie zeigt die Statistiken der Top 10 Bedrohungen vom Jahr 2021. Ich habe die top 3 in meiner Tabelle eingebaut.
 
 ### Kritische Beurteilung der Umsetzung des Artefakts
-
-Ich denke, dass die Umsetzung des Artefakts gut gelungen ist. Die OWASP Top 10 ist eine sehr bekannte und anerkannte Liste von Sicherheitsrisiken, die regelmäßig aktualisiert wird. Die Liste ist sehr umfangreich und bietet einen guten Überblick über die wichtigsten Sicherheitsrisiken. Die Tabelle ist übersichtlich und strukturiert und bietet einen schnellen Überblick über die wichtigsten Informationen zu jedem Sicherheitsrisiko.
+Mein Artefakt sieht strukturiert und einfach zu lesen aus. Jedoch ist sie einbisschen kurz. Ich hätte anstatt die Top 3 Bedrohungen einfach alle Bedrohungen auflisten können. Wenn man die knappheit auslässt, finde ich, das Artefakt ist gut gelungen. Die Daten der owasp Webseite sind vertraulich.
 ## **_Handlungsziel 2_**
 
 Aufträge bearbeitet: 
