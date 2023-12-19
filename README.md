@@ -17,20 +17,16 @@ Die Handlungsziele sehen wie folgt aus:
 ## _Handlungsziel 1_
 
 ### Artefakt
-Als Artefakt habe ich eine Tabelle der OWASP Top 10 2021 erstellt. Wir haben die Webseite gemeinsam im Unterricht angeschaut.
+Als Artefakt habe ich eine Tabelle der top 3 Bedrohungen erstellt. 
 
 | Sicherheitsrisiko                          | Beschreibung                                              | Gegenmaßnahmen                                                         | Auswirkungen                                                                        |
 | ------------------------------------------ | -------------------------------------------------- | ---------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
-| Broken Access Control                      | Authentifizierungsprüfungen, Zugriffskontrollen    | Verbesserte Zugriffskontrollen, Session-Verwaltung, Least-Privilege    | Unberechtigter Datenzugriff, Datenmanipulation, Identity Theft                      |
+| Broken Access Control                      | Benutzer können ausserhalb ihrer zugewiesenen Berechtigungen handeln.   |Session-Verwaltung,  Verbesserte Zugriffskontrollen   | Unberechtigter Datenzugriff und Manipulation                |
 | Cryptographic Failures                     | Kryptographische Audits, Verschlüsselungsprüfungen | Implementierung aktueller Verschlüsselungsstandards, Schlüsselrotation | Offenlegung sensibler Daten, Systemkompromittierung, Brute-Force                    |
 | Injection                                  | Penetrationstests, Code-Analyse                    | Eingabevalidierung, Prepared Statements, Parameterized Queries         | Datenverlust, Systemkompromittierung, SQL Injection                                 |
-| Insecure Design                            | Risikoanalyse, Sicherheitsdesignprüfungen          | Threat Modeling, Sichere Designmuster, Input Validierung               | Designfehler, Schwierigkeiten bei der Fehlerbehebung, Broken Authentication         |
-| Security Misconfiguration                  | Sicherheitskonfigurationsprüfungen                 | Automatisierte Konfigurationsprüfungen, Regelkonformität               | Sicherheitslücken, Unberechtigter Datenzugriff, Exposed Sensitive Data              |
-| Vulnerable and Outdated Components         | Schwachstellenanalysen, Versionskontrolle          | Aktualisierung von Komponenten, Verwendung vertrauenswürdiger Quellen  | Bekannte Exploits, Anfälligkeit für Angriffe, Zero-Day Vulnerabilities              |
-| Identification and Authentication Failures | Identitätsprüfungen, Authentifizierungstests       | Multifaktor-Authentifizierung, Sichere Authentifizierungsmethoden      | Identitätsdiebstahl, Zugriff durch nicht autorisierte Benutzer, Credential Stuffing |
-| Software and Data Integrity Failures       | Integritätsprüfungen, Softwareupdatesprüfungen     | Verifizierung von Softwareupdates, Sichere CI/CD-Pipelines             | Kompromittierung von Datenintegrität, Schadsoftwareausführung, Tampered Software    |
-| Security Logging and Monitoring Failures   | Überwachungstests, Logging-Analysen                | Implementierung von Logging, Überwachung kritischer Aktivitäten        | Unbemerkte Angriffe, Verzögerung der Reaktion auf Vorfälle, Evasion Techniques      |
-| Server Side Request Forgery (SSRF)         | Tests für serverseitige Anfragen, Validierungen    | Inputvalidierung, Abschirmung von sensiblen Ressourcen                 | Umleitung von Anfragen, Ausnutzung von Serverressourcen, Information Disclosure     |
+
+
+
 
 Quelle: [https://owasp.org/Top10/](https://owasp.org/Top10/)
 
