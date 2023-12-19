@@ -17,9 +17,9 @@ Die Handlungsziele sehen wie folgt aus:
 ## _Handlungsziel 1_
 
 ### Artefakt
-Als Artefakt habe ich eine Tabelle der OWASP Top 10 2021 erstellt. Wir haben die Webseite im Unterricht angeschaut.
+Als Artefakt habe ich eine Tabelle der OWASP Top 10 2021 erstellt. Wir haben die Webseite gemeinsam im Unterricht angeschaut.
 
-| Sicherheitsrisiko                          | Tests                                              | Gegenmaßnahmen                                                         | Auswirkungen                                                                        |
+| Sicherheitsrisiko                          | Beschreibung                                              | Gegenmaßnahmen                                                         | Auswirkungen                                                                        |
 | ------------------------------------------ | -------------------------------------------------- | ---------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
 | Broken Access Control                      | Authentifizierungsprüfungen, Zugriffskontrollen    | Verbesserte Zugriffskontrollen, Session-Verwaltung, Least-Privilege    | Unberechtigter Datenzugriff, Datenmanipulation, Identity Theft                      |
 | Cryptographic Failures                     | Kryptographische Audits, Verschlüsselungsprüfungen | Implementierung aktueller Verschlüsselungsstandards, Schlüsselrotation | Offenlegung sensibler Daten, Systemkompromittierung, Brute-Force                    |
