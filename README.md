@@ -113,28 +113,21 @@ Ich habe das Handlungsziel erreicht indem ich mit der Veränderung des Codes ein
 Mein Artefakt zeigt Zwei Versionen eines Codes. In der ersten besteht die Gefahr von injections wie einer SQL injection. In der zweiten ist diese Gefahr behoben da die Eingaben des Benutzers nichtmehr direkt in die SQL-Abfrage eingefügt werden sondern als seperate Variable verwendet werden. Als Beispiel hätte man in der ersten Version als Passwort `--` schreiben können um sich als jeder belieber Benutzer einloggen zu können, selbst als Administrator.
 
 
-### Kritische Beurteilung des Artefakts
+### Beurteilung des Artefakts
 
 Das Artefakt ist mir gut gelungen, wir hatten es 1 zu 1 so im Unterricht angeschaut, weswegen es keine grosse Herausforderung dargestellt hat. Das Artefakt ist ein gutes Beispiel für einen unsicheren und sicheren code, wobei man sagen muss, man kann einen Code so gut wie immer noch sicherer gestalten.
 
 ## **_Handlungsziel 3_**
 
-BrokenAccessControl
-Autorisierung
-Authentifizierung
-PasswortHashing
+
 
 ## **_Handlungsziel 4_**
 
-SecretImRepository
-HumanFactor
-DefensiveProgrammierung
+
 
 ## **_Handlungsziel 5_**
 
-Logging
-Zusätzliche Lern-Arbeitsaufträge:
-AuditTrail
+
 
 ## Selbsteinschätzung des Erreichungsgrades der Kompetenz des Moduls
 Geben Sie eine Selbsteinschätzung zu der Kompetenz in diesem Modul ab. Schätzen Sie selbst ein, inwiefern Sie die Kompetenz dieses Moduls erreicht haben und inwiefern nicht. Es geht in diesem Abschnitt nicht darum, auf die einzelnen Handlungsziele einzugehen. Das haben Sie bereits gemacht. Begründen Sie ihre Aussagen.
