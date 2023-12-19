@@ -119,6 +119,92 @@ Das Artefakt ist mir gut gelungen, wir hatten es 1 zu 1 so im Unterricht angesch
 
 ## **_Handlungsziel 3_**
 
+### Artefakt
+Als Artefakt benutze ich den Code von den Aufträgen: LA_183_11_Autorisierung und LA_183_12_Authentifizierung
+
+```csharp
+[HttpPost]
+[ProducesResponseType(200)]
+[ProducesResponseType(400)]
+[ProducesResponseType(401)]
+public ActionResult<User> Login(LoginDto request)
+{
+    if (request == null || request.Username.IsNullOrEmpty() || request.Password.IsNullOrEmpty())
+    {
+        return BadRequest();
+    }
+    string username = request.Username;
+    string passwordHash = MD5Helper.ComputeMD5Hash(request.Password);
+
+    User? user = _context.Users
+        .Where(u => u.Username == username)
+        .Where(u => u.Password == passwordHash)
+        .FirstOrDefault();
+
+    if (user == null)
+    {
+        return Unauthorized("login failed");
+    }
+
+    if (user.SecretKey2FA != null)
+    {
+        string secretKey = user.SecretKey2FA;
+        string userUniqueKey = user.Username + secretKey;
+        TwoFactorAuthenticator authenticator = new TwoFactorAuthenticator();
+        bool isAuthenticated = authenticator.ValidateTwoFactorPIN(userUniqueKey, request.UserKey);
+        if (!isAuthenticated)
+        {
+            return Unauthorized("login failed");
+        }
+    }
+
+    return Ok(CreateToken(user));
+}
+
+private string CreateToken(User user)
+{
+    string issuer = _configuration.GetSection("Jwt:Issuer").Value!;
+    string audience = _configuration.GetSection("Jwt:Audience").Value!;
+
+    List<Claim> claims = new List<Claim> {
+            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+            new Claim(JwtRegisteredClaimNames.NameId, user.Id.ToString()),
+            new Claim(JwtRegisteredClaimNames.UniqueName, user.Username),
+            new Claim(ClaimTypes.Role,  (user.IsAdmin ? "admin" : "user"))
+    };
+
+    string base64Key = _configuration.GetSection("Jwt:Key").Value!;
+    SymmetricSecurityKey securityKey = new SymmetricSecurityKey(Convert.FromBase64String(base64Key));
+
+    SigningCredentials credentials = new SigningCredentials(
+            securityKey,
+            SecurityAlgorithms.HmacSha512Signature);
+
+    JwtSecurityToken token = new JwtSecurityToken(
+        issuer: issuer,
+        audience: audience,
+        claims: claims,
+        notBefore: DateTime.Now,
+        expires: DateTime.Now.AddDays(1),
+        signingCredentials: credentials
+     );
+
+    return new JwtSecurityTokenHandler().WriteToken(token);
+}
+```
+
+
+### Wie wurde das Handlungsziel erreicht?
+
+Das Handlungsziel wurde erreicht, indem ich in dem Artefakt, Mechanismen für die Authentifizierung und Autorisierung umgesetzt habe. Für die Autorisierung wurde JWT-Token umgesetzt und für die 2FA wurde google authenticator integriert
+
+### Erklärung des Artefakts
+
+Im Artefakt werden Nutzerdaten überprüft und als JWT-Token gespeichert um für Sicherheit zu sorgen. Zusätzlich wurde eine 2FA mittels google authenticator eingebaut um für mehr Sicherheit zu sorgen
+
+### Beurteilung des Artefakts
+
+JWT-Token und google authenticator zu benutzen sorgt für sehr viel Sichherheit, Plus es sind relativ simple Autorisierungs und Authentifizierungs Mechanismen. Das Artefakt ist gut gelungen, da es nun relativ sicher ist. Man könnte jedoch eventuell ein anderes Hashing benutzen.
 
 
 ## **_Handlungsziel 4_**
