@@ -1,7 +1,9 @@
 # ZumsteinDavidLB-183
 
 ## Einleitung
-Dies ist die Leistungsbeurteilung von David Zumstein. In diesem Portfolio zeige ich auf, wie ich jeweils ein Handlungsziel erfülle. Für jedes Handlungsziel wird erklärt um was es geht und anschliessend zeige ich mit einem Artefakt auf, wie ich das Handlungsziel erfüllt habe. Ingesamt sind es 5 Handlungsziele.
+Dies ist die Leistungsbeurteilung von David Zumstein. Dieses Portfolio dient dazu, die Handlungsziele des Moduls 183 nachzuweisen. In diesem Modul geht es um die Applikationssicherheit. Jedes Handlungsziel hat ein eigenen Abschnitt mit jeweils einem Artefakt, welches ich erläuteren werde. 
+Die Handlungsziele sehen wie folgt aus:
+
 
 
 | Handlungsziel | Beschreibung                                                                                                                                                                             |
