@@ -115,7 +115,7 @@ Mein Artefakt zeigt Zwei Versionen eines Codes. In der ersten besteht die Gefahr
 
 ### Beurteilung des Artefakts
 
-Das Artefakt ist mir gut gelungen, wir hatten es 1 zu 1 so im Unterricht angeschaut, weswegen es keine grosse Herausforderung dargestellt hat. Das Artefakt ist ein gutes Beispiel für einen unsicheren und sicheren code, wobei man sagen muss, man kann einen Code so gut wie immer noch sicherer gestalten.
+Das Artefakt ist mir gut gelungen, wir hatten es 1 zu 1 so im Unterricht angeschaut, weswegen es keine grosse Herausforderung dargestellt hat. Das Artefakt ist ein gutes Beispiel für einen unsicheren und sicheren code, wobei man sagen muss, man kann einen Code so gut wie immer noch sicherer gestalten. Man könnte noch mehr Sicherheitsmassnahmen einbauen.
 
 ## **_Handlungsziel 3_**
 
