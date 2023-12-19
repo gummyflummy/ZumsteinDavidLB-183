@@ -304,7 +304,192 @@ Das Artefakt besitzt einen sinnvollen Mechanismus. Jedoch könnte man noch mehr 
 
 ## **_Handlungsziel 5_**
 
+### Artefakt
+
+Als Artefakt benutze ich den Code von den Aufträgen: LA_183_17_Logging und LA_183_51_AuditTrail
+
+```csharp
+[Route("api/[controller]")]
+[ApiController]
+public class LoginController : ControllerBase
+{
+    private readonly ILogger _logger;
+    private readonly NewsAppContext _context;
+    private readonly IConfiguration _configuration;
+
+    public LoginController(ILogger<LoginController> logger, NewsAppContext context, IConfiguration configuration)
+    {
+        _logger = logger;
+        _context = context;
+        _configuration = configuration;
+    }
+
+    /// <summary>
+    /// Login a user using password and username
+    /// </summary>
+    /// <response code="200">Login successfull</response>
+    /// <response code="400">Bad request</response>
+    /// <response code="401">Login failed</response>
+    [HttpPost]
+    [ProducesResponseType(200)]
+    [ProducesResponseType(400)]
+    [ProducesResponseType(401)]
+    public ActionResult<User> Login(LoginDto request)
+    {
+        if (request == null || request.Username.IsNullOrEmpty() || request.Password.IsNullOrEmpty())
+        {
+            return BadRequest();
+        }
+        string username = request.Username;
+        string passwordHash = MD5Helper.ComputeMD5Hash(request.Password);
+
+        User? user = _context.Users
+            .Where(u => u.Username == username)
+            .Where(u => u.Password == passwordHash)
+            .FirstOrDefault();
+
+        if (user == null)
+        {
+            _logger.LogWarning($"login failed for user '{request.Username}'");
+            return Unauthorized("login failed");
+        }
+
+        _logger.LogInformation($"login successful for user '{request.Username}'");
+        return Ok(CreateToken(user));
+    }
+
+    private string CreateToken(User user)
+    {
+        string issuer = _configuration.GetSection("Jwt:Issuer").Value!;
+        string audience = _configuration.GetSection("Jwt:Audience").Value!;
+
+        List<Claim> claims = new List<Claim> {
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim(JwtRegisteredClaimNames.NameId, user.Id.ToString()),
+                new Claim(JwtRegisteredClaimNames.UniqueName, user.Username),
+                new Claim(ClaimTypes.Role,  (user.IsAdmin ? "admin" : "user"))
+        };
+
+        string base64Key = _configuration.GetSection("Jwt:Key").Value!;
+        SymmetricSecurityKey securityKey = new SymmetricSecurityKey(Convert.FromBase64String(base64Key));
+
+        SigningCredentials credentials = new SigningCredentials(
+                securityKey,
+                SecurityAlgorithms.HmacSha512Signature);
+
+        JwtSecurityToken token = new JwtSecurityToken(
+            issuer: issuer,
+            audience: audience,
+            claims: claims,
+            notBefore: DateTime.Now,
+            expires: DateTime.Now.AddDays(1),
+            signingCredentials: credentials
+         );
+
+        return new JwtSecurityTokenHandler().WriteToken(token);
+    }
+}
+```
+
+Konfiguration:
+
+```csharp
+builder.Host.ConfigureLogging(logging =>
+{
+    logging.ClearProviders();
+    logging.AddConsole(); // Console Output
+    logging.AddDebug(); // Debugging Console Output
+});
+```
+
+Audit-Trail:
+
+```csharp
+    namespace M183.Migrations
+
+{
+/// <inheritdoc />
+public partial class CreateTrigger : Migration
+{
+/// <inheritdoc />
+protected override void Up(MigrationBuilder migrationBuilder)
+{
+migrationBuilder.CreateTable(
+name: "NewsAudit",
+columns: table => new
+{
+Id = table.Column<int>(type: "int", nullable: false)
+.Annotation("SqlServer:Identity", "1, 1"),
+NewsId = table.Column<int>(type: "int", nullable: false),
+Action = table.Column<string>(type: "nvarchar(max)", nullable: false),
+AuthorId = table.Column<int>(type: "int", nullable: false)
+},
+constraints: table =>
+{
+table.PrimaryKey("PK_NewsAudit", x => x.Id);
+});
+
+            migrationBuilder.Sql(@"CREATE TRIGGER news_insert ON dbo.News
+                AFTER INSERT
+                AS DECLARE
+                  @NewsId INT,
+                  @AuthorId INT;
+                SELECT @NewsId = ins.ID FROM INSERTED ins;
+                SELECT @AuthorId = ins.AuthorId FROM INSERTED ins;
+
+                INSERT INTO NewsAudit (NewsId, Action, AuthorId) VALUES (@NewsId, 'Create', @AuthorId);");
+
+            migrationBuilder.Sql(@"CREATE TRIGGER news_update ON dbo.News
+                AFTER UPDATE
+                AS DECLARE
+                  @NewsId INT,
+                  @AuthorId INT;
+                SELECT @NewsId = ins.ID FROM INSERTED ins;
+                SELECT @AuthorId = ins.AuthorId FROM INSERTED ins;
+
+                INSERT INTO NewsAudit (NewsId, Action, AuthorId) VALUES (@NewsId, 'Update', @AuthorId);");
+
+
+            migrationBuilder.Sql(@"CREATE TRIGGER news_delete ON dbo.News
+                AFTER DELETE
+                AS DECLARE
+                  @NewsId INT,
+                  @AuthorId INT;
+                SELECT @NewsId = del.ID FROM DELETED del;
+                SELECT @AuthorId = del.AuthorId FROM DELETED del;
+
+                INSERT INTO NewsAudit (NewsId, Action, AuthorId) VALUES (@NewsId, 'Delete', @AuthorId);");
+
+        }
+
+        /// <inheritdoc />
+        protected override void Down(MigrationBuilder migrationBuilder)
+        {
+            migrationBuilder.DropTable(name: "NewsAudit");
+            migrationBuilder.Sql("DROP TRIGGER IF EXISTS news_insert");
+            migrationBuilder.Sql("DROP TRIGGER IF EXISTS news_update");
+            migrationBuilder.Sql("DROP TRIGGER IF EXISTS news_delete");
+        }
+    }
+
+}
+```
+
+### Wie wurde das Handlungsziel erreicht?
+
+Das Handlungsziel wurde erreicht indem das Artefakt die Implementierung von Logging und die Einrichtung vom Audit-Trail umfasst.
+
+### Erklärung des Artefakts
+
+Als Logging wurde ILogger integriert umd Erreignisse zu protokollieren. EIn Audit-Trail wurde mittels Datenbank-Triggern implementiert um Änderungen zu protokollieren und zu speichern.
+
+### Beurteilung des Artefakts
+
+Das Artefakt benutzt gute Methoden. ILogger ist eine sehr bekannte Methode für das logging von Informationen, plus die Verwendung von SQL Server Triggers für das Auditing ist auch eine flotte Methode um Änderungen zu protokollieren und zu speichern. So wie Immer bin ich mir aber sicher, dass es besser geht. Man könnte zum Beispiel mehr kriterien für die Informationen angeben die protokoliiert werden sollten.
+
 
 
 ## Selbsteinschätzung des Erreichungsgrades der Kompetenz des Moduls
 Geben Sie eine Selbsteinschätzung zu der Kompetenz in diesem Modul ab. Schätzen Sie selbst ein, inwiefern Sie die Kompetenz dieses Moduls erreicht haben und inwiefern nicht. Es geht in diesem Abschnitt nicht darum, auf die einzelnen Handlungsziele einzugehen. Das haben Sie bereits gemacht. Begründen Sie ihre Aussagen.
+
+Ich habe die Kompetenz dieses Moduls erreicht. Der Unterricht hat alles sehr gründlich und gut abgedeckt. Unser Lehrer hat dafür gesorgt, dass wir dieses Modul verstehen, was ich sehr gut finde. Was Mein Portfolio-Eintrag angeht bin ich mir nicht sicher. Ich habe probiert so gut wie möglich die Handlungszielen mit Artefakten nachzuweisen und habe mich an die Portfolio Vorschriften gehalten. All meine Artefakte sind jedoch von den Arbeitsaufträgen in den Modulen selber und ich habe nichts privates bis auf die Tabelle im ersten Handlungsziel gemacht. Nichtsdestotrotz denke ich, ich habe das Meiste abgedeckt.
