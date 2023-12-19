@@ -209,6 +209,97 @@ JWT-Token und google authenticator zu benutzen sorgt für sehr viel Sichherheit,
 
 ## **_Handlungsziel 4_**
 
+### Artefakt
+Als Artefakt benutze ich den Code von dem Auftrag: LA_183_15_PasswortHashing
+
+```csharp
+[HttpPatch("password-update")]
+[ProducesResponseType(200)]
+[ProducesResponseType(400)]
+[ProducesResponseType(404)]
+public ActionResult PasswordUpdate(PasswordUpdateDto request)
+{
+    if (request == null)
+    {
+        return BadRequest("No request body");
+    }
+
+    var user = _context.Users.Find(request.UserId);
+    if (user == null)
+    {
+        return NotFound(string.Format("User {0} not found", request.UserId));
+    }
+
+    if (user.Password != MD5Helper.ComputeMD5Hash(request.OldPassword))
+    {
+        return Unauthorized("Old password wrong");
+    }
+
+    string passwordValidation = validateNewPasswort(request.NewPassword);
+    if (passwordValidation != "")
+    {
+        return BadRequest(passwordValidation);
+    }
+
+    user.IsAdmin = request.IsAdmin;
+    user.Password = MD5Helper.ComputeMD5Hash(request.NewPassword);
+
+    _context.Users.Update(user);
+    _context.SaveChanges();
+
+    return Ok("success");
+}
+
+private string validateNewPasswort(string newPassword)
+{
+    // Check small letter.
+    string patternSmall = "[a-zäöü]";
+    Regex regexSmall = new Regex(patternSmall);
+    bool hasSmallLetter = regexSmall.Match(newPassword).Success;
+
+    string patternCapital = "[A-ZÄÖÜ]";
+    Regex regexCapital = new Regex(patternCapital);
+    bool hasCapitalLetter = regexCapital.Match(newPassword).Success;
+
+    string patternNumber = "[0-9]";
+    Regex regexNumber = new Regex(patternNumber);
+    bool hasNumber = regexNumber.Match(newPassword).Success;
+
+    List<string> result = new List<string>();
+    if (!hasSmallLetter)
+    {
+        result.Add("keinen Kleinbuchstaben");
+    }
+    if (!hasCapitalLetter)
+    {
+        result.Add("keinen Grossbuchstaben");
+    }
+    if (!hasNumber)
+    {
+        result.Add("keine Zahl");
+    }
+
+    if (result.Count > 0)
+    {
+        return "Das Passwort beinhaltet " + string.Join(", ", result);
+    }
+    return "";
+}
+```
+
+
+### Wie wurde das Handlungsziel erreicht?
+
+Das Handlungsziel wurde erreicht, indem das Artefakt ein starker Passwort Mechanismus besitzt. Es werden sicherheitsrelevante Aspekte berücksichtigt.
+
+### Erklärung des Artefakts
+
+Die Funktion für das Passwortupdate überprüft das Passwort, bevor es geändert wird, und führt eine Validierung des Passworts durch, damit das Passwort bestimmte Sicherheitsvorgaben erfüllt.
+
+### Beurteilung des Artefakts
+
+Das Artefakt besitzt einen sinnvollen Mechanismus. Jedoch könnte man noch mehr Sicherheitskriterien einbauen, da es momentan nur die Vorgaben Gross und Kleinbuchstaben sowie Zahlen gibt.
+
 
 
 ## **_Handlungsziel 5_**
